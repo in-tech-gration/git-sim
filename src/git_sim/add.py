@@ -24,8 +24,8 @@ class Add(GitSimBaseCommand):
             pass
 
         for file in self.files:
-            if file not in [x.a_path for x in self.repo.index.diff(None)] + [
-                z for z in self.repo.untracked_files
+            if file not in [modified_file.a_path for modified_file in self.repo.index.diff(None)] + [
+                untracked_file for untracked_file in self.repo.untracked_files
             ]:
                 print(f"git-sim error: No modified file with name: '{file}'")
                 sys.exit()
@@ -55,16 +55,19 @@ class Add(GitSimBaseCommand):
         secondColumnArrowMap={},
         thirdColumnArrowMap={},
     ):
-        for x in self.repo.index.diff(None):
-            if "git-sim_media" not in x.a_path:
-                secondColumnFileNames.add(x.a_path)
+        # modified_file in here, might not be the most precise term. Using for now. Keep an eye on it.
+        for modified_file in self.repo.index.diff(None):
+            print("modified_file", modified_file)
+            if "git-sim_media" not in modified_file.a_path:
+                secondColumnFileNames.add(modified_file.a_path)
                 for file in self.files:
-                    if file == x.a_path:
-                        thirdColumnFileNames.add(x.a_path)
-                        secondColumnArrowMap[x.a_path] = m.Arrow(
+                    if file == modified_file.a_path:
+                        thirdColumnFileNames.add(modified_file.a_path)
+                        secondColumnArrowMap[modified_file.a_path] = m.Arrow(
                             stroke_width=3, color=self.fontColor
                         )
         try:
+            # TODO: Rename y to something more descriptive
             for y in self.repo.index.diff("HEAD"):
                 if "git-sim_media" not in y.a_path:
                     thirdColumnFileNames.add(y.a_path)
@@ -73,12 +76,12 @@ class Add(GitSimBaseCommand):
                 if "git-sim_media" not in y:
                     thirdColumnFileNames.add(y)
 
-        for z in self.repo.untracked_files:
-            if "git-sim_media" not in z:
-                firstColumnFileNames.add(z)
+        for untracked_file in self.repo.untracked_files:
+            if "git-sim_media" not in untracked_file:
+                firstColumnFileNames.add(untracked_file)
                 for file in self.files:
-                    if file == z:
-                        thirdColumnFileNames.add(z)
-                        firstColumnArrowMap[z] = m.Arrow(
+                    if file == untracked_file:
+                        thirdColumnFileNames.add(untracked_file)
+                        firstColumnArrowMap[untracked_file] = m.Arrow(
                             stroke_width=3, color=self.fontColor
                         )
