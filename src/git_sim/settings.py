@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings
 from git_sim.enums import StyleOptions, ColorByOptions, ImgFormat, VideoFormat
 
 class Settings(BaseSettings):
+  
     all: bool = False
     allow_no_commits: bool = False
     animate: bool = False
