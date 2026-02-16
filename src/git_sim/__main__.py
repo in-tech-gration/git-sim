@@ -171,6 +171,10 @@ def main(
         "--transparent-bg",
         help="Make background transparent",
     ),
+    use_colors: bool = typer.Option(
+      settings.use_colors,
+      help="Use colored sections for the 3 stages of git"
+    ),
     version: bool = typer.Option(
         False,
         "--version",
@@ -187,37 +191,38 @@ def main(
     import git
     from manim import WHITE, config
 
+    settings.all = all
     settings.animate = animate
-    settings.n = n
     settings.auto_open = auto_open
+    settings.color_by = color_by
+    settings.use_colors = use_colors
     settings.fadeout = fadeout
+    settings.hide_merged_branches = hide_merged_branches
+    settings.highlight_commit_messages = highlight_commit_messages
     settings.img_format = img_format
+    settings.invert_branches = invert_branches
     settings.light_mode = light_mode
-    settings.transparent_bg = transparent_bg
     settings.logo = logo
     settings.low_quality = low_quality
     settings.max_branches_per_commit = max_branches_per_commit
     settings.max_tags_per_commit = max_tags_per_commit
     settings.media_dir = os.path.join(os.path.expanduser(media_dir), "git-sim_media")
+    settings.n = n
+    settings.output_only_path = output_only_path
     settings.outro_bottom_text = outro_bottom_text
     settings.outro_top_text = outro_top_text
+    settings.quiet = quiet
+    settings.repo = repo
     settings.reverse = reverse
+    settings.show_command_as_title = show_command_as_title
     settings.show_intro = show_intro
     settings.show_outro = show_outro
     settings.speed = speed
-    settings.repo = repo
-    settings.title = title
-    settings.video_format = video_format
     settings.stdout = stdout
-    settings.output_only_path = output_only_path
-    settings.quiet = quiet
-    settings.invert_branches = invert_branches
-    settings.hide_merged_branches = hide_merged_branches
-    settings.all = all
-    settings.color_by = color_by
-    settings.highlight_commit_messages = highlight_commit_messages
     settings.style = style
-    settings.show_command_as_title = show_command_as_title
+    settings.title = title
+    settings.transparent_bg = transparent_bg
+    settings.video_format = video_format
 
     # If font is a path, define the context that will be used when using Manim.
     if Path(font).exists():

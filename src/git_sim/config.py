@@ -20,6 +20,7 @@ from git_sim.git_sim_base_command import GitSimBaseCommand
 
 
 class Config(GitSimBaseCommand):
+  
     def __init__(self, l: bool, settings: List[str]):
         super().__init__()
         self.l = l

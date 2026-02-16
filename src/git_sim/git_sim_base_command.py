@@ -16,7 +16,7 @@ from git_sim.settings import settings
 
 
 class GitSimBaseCommand(m.MovingCameraScene):
-  
+
     def __init__(self):
         super().__init__()
         self.cmd = "git "
@@ -56,6 +56,13 @@ class GitSimBaseCommand(m.MovingCameraScene):
             m.PINK,
             m.DARK_BLUE,
         ]
+        # Based on: https://git-scm.com/book/it/v2/images/lifecycle.png
+        self.git_colors = {
+          "staged" : "#f54e27",
+          "modified": "#cd9f01",
+          "unmodified": "#02919a",
+          "untracked": "#e9eae3"
+        }
 
         self.logo = m.ImageMobject(settings.logo)
         self.logo.width = 3
@@ -715,7 +722,8 @@ class GitSimBaseCommand(m.MovingCameraScene):
                 first_column_name,
                 font=self.font,
                 font_size=28,
-                color=self.fontColor,
+                # color=self.fontColor,
+                color = self.git_colors["untracked"] if settings.use_colors else self.fontColor,
                 weight=m.BOLD,
             )
             .move_to((vert1.get_center()[0] - 4, horizontal.get_start()[1], 0))
@@ -726,7 +734,8 @@ class GitSimBaseCommand(m.MovingCameraScene):
                 second_column_name,
                 font=self.font,
                 font_size=28,
-                color=self.fontColor,
+                # color=self.fontColor,
+                color = self.git_colors["modified"] if settings.use_colors else self.fontColor,
                 weight=m.BOLD,
             )
             .move_to(self.camera.frame.get_center())
@@ -737,7 +746,8 @@ class GitSimBaseCommand(m.MovingCameraScene):
                 third_column_name,
                 font=self.font,
                 font_size=28,
-                color=self.fontColor,
+                # color=self.fontColor,
+                color = self.git_colors["staged"] if settings.use_colors else self.fontColor,
                 weight=m.BOLD,
             )
             .move_to((vert2.get_center()[0] + 4, 0, 0))
@@ -1231,7 +1241,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
                     self.trim_path(f),
                     font=self.font,
                     font_size=24,
-                    color=self.fontColor,
+                    color= self.git_colors["untracked"] if settings.use_colors else self.fontColor
                 )
                 .move_to(
                     (firstColumnTitle.get_center()[0], horizontal2.get_center()[1], 0)
@@ -1247,7 +1257,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
                     self.trim_path(f),
                     font=self.font,
                     font_size=24,
-                    color=self.fontColor,
+                    color= self.git_colors["modified"] if settings.use_colors else self.fontColor
                 )
                 .move_to(
                     (secondColumnTitle.get_center()[0], horizontal2.get_center()[1], 0)
@@ -1263,7 +1273,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
                     self.trim_path(f),
                     font=self.font,
                     font_size=24,
-                    color=self.fontColor,
+                    color= self.git_colors["staged"] if settings.use_colors else self.fontColor
                 )
                 .move_to(
                     (thirdColumnTitle.get_center()[0], horizontal2.get_center()[1], 0)

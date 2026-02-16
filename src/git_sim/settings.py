@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     style: Union[StyleOptions, None] = StyleOptions.CLEAN
     title: str = "Git-Sim, by initialcommit.com"
     transparent_bg: bool = False
+    use_colors: bool = False
     video_format: VideoFormat = VideoFormat.MP4
 
     class Config:

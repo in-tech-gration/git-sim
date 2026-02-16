@@ -30,6 +30,7 @@ class Add(GitSimBaseCommand):
                 print(f"git-sim error: No modified file with name: '{file}'")
                 sys.exit()
 
+        # __name__ == git_sim.add
         self.cmd += f"{type(self).__name__.lower()} {' '.join(self.files)}"
 
     def construct(self):
