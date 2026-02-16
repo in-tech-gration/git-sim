@@ -4,6 +4,7 @@ import shutil
 import stat
 import sys
 import tempfile
+import math
 
 import git
 import manim as m
@@ -655,6 +656,121 @@ class GitSimBaseCommand(m.MovingCameraScene):
         except ValueError:
             pass
 
+    # TODO: Split horizontal lines into 3 staging areas:
+    def draw_section_lines(
+      self,
+      first_column_name,
+      second_column_name,
+      third_column_name,
+    ):
+
+      stageLines = m.VGroup()
+
+      if ( 
+        first_column_name == "Untracked files" and
+        second_column_name == "Modified files" and
+        third_column_name == "Staged files"
+      ):
+
+            left_section_color = self.git_colors["untracked"]
+            center_section_color = self.git_colors["modified"]
+            right_section_color = self.git_colors["staged"]
+
+            left_top = m.Line(
+                (
+                    self.camera.frame.get_left()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_center()[0] - 6.25,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=left_section_color,
+            ).shift(m.UP * 1.75)
+            
+            left_bottom = m.Line(
+                (
+                    self.camera.frame.get_left()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_center()[0] - 6.25,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=left_section_color,
+            ).shift(m.UP * 0.75)
+            
+            center_top = m.Line(
+                (
+                    self.camera.frame.get_left()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_center()[0] - 1.75,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=center_section_color,
+            ).shift(m.RIGHT * 8, m.UP * 1.75)
+
+            center_bottom = m.Line(
+                (
+                    self.camera.frame.get_left()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_center()[0] - 1.75,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=center_section_color,
+            ).shift(m.RIGHT * 8, m.UP * 0.75)
+
+            right_top = m.Line(
+                (
+                    self.camera.frame.get_center()[0] - 1.75,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_right()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=right_section_color,
+            ).shift(m.RIGHT * 8, m.UP * 1.75)
+
+            right_bottom = m.Line(
+                (
+                    self.camera.frame.get_center()[0] - 1.75,
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                (
+                    self.camera.frame.get_right()[0],
+                    self.camera.frame.get_center()[1],
+                    0,
+                ),
+                color=right_section_color,
+            ).shift(m.RIGHT * 8, m.UP * 0.75)
+
+            stageLines.add(
+              left_top, 
+              left_bottom,
+              center_top,
+              center_bottom,
+              right_top,
+              right_bottom
+            )
+
+      return stageLines
+
     def setup_and_draw_zones(
         self,
         first_column_name="Untracked files",
@@ -662,6 +778,8 @@ class GitSimBaseCommand(m.MovingCameraScene):
         third_column_name="Staged files",
         reverse=False,
     ):
+        # self == Add, etc.
+        # print("self", self)
         if self.check_all_dark():
             self.zone_title_offset = 2.0 if platform.system() == "Windows" else 2.0
 
@@ -678,6 +796,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
             ),
             color=self.fontColor,
         ).shift(m.UP * 1.75)
+
         horizontal2 = m.Line(
             (
                 self.camera.frame.get_left()[0],
@@ -691,16 +810,22 @@ class GitSimBaseCommand(m.MovingCameraScene):
             ),
             color=self.fontColor,
         ).shift(m.UP * 0.75)
+
         vert1 = m.DashedLine(
             (
                 self.camera.frame.get_left()[0],
                 self.camera.frame.get_bottom()[1],
                 0,
             ),
-            (self.camera.frame.get_left()[0], horizontal.get_start()[1], 0),
+            (
+              self.camera.frame.get_left()[0], 
+              horizontal.get_start()[1], 
+              0
+            ),
             dash_length=0.2,
             color=self.fontColor,
         ).shift(m.RIGHT * 8)
+
         vert2 = m.DashedLine(
             (
                 self.camera.frame.get_right()[0],
@@ -717,6 +842,9 @@ class GitSimBaseCommand(m.MovingCameraScene):
             third_column_name = "Deleted changes"
 
         title_v_shift = abs(horizontal2.get_start()[1] - horizontal.get_start()[1]) / 2
+
+        # COLUMN TITLES
+        
         firstColumnTitle = (
             m.Text(
                 first_column_name,
@@ -764,8 +892,18 @@ class GitSimBaseCommand(m.MovingCameraScene):
             thirdColumnTitle,
         )
 
+        stageLines = self.draw_section_lines(
+          first_column_name,
+          second_column_name,
+          third_column_name,
+        )
+
         if settings.animate:
             self.play(
+                # TODO
+                m.Create(stageLines
+                ),
+
                 m.Create(horizontal),
                 m.Create(horizontal2),
                 m.Create(vert1),
@@ -776,8 +914,13 @@ class GitSimBaseCommand(m.MovingCameraScene):
             )
         else:
             self.add(
+
                 horizontal,
                 horizontal2,
+
+                # TODO:
+                stageLines,
+
                 vert1,
                 vert2,
                 firstColumnTitle,
