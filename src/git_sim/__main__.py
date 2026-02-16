@@ -42,16 +42,35 @@ def main(
         settings.animate,
         help="Animate the simulation and output as an mp4 video",
     ),
-    n: int = typer.Option(
-        settings.n,
-        "-n",
-        help="Number of commits to display from each branch head",
+    all: bool = typer.Option(
+        settings.all,
+        help="Display all local branches in the log output",
     ),
     auto_open: bool = typer.Option(
         settings.auto_open,
         "--auto-open",
         " /-d",
         help="Enable / disable the automatic opening of the image/video file after generation",
+    ),
+    color_by: ColorByOptions = typer.Option(
+        settings.color_by,
+        help="Color commits by parameter",
+    ),
+    font: str = typer.Option(
+        settings.font,
+        help="Font family used to display rendered text",
+    ),
+    hide_merged_branches: bool = typer.Option(
+        settings.hide_merged_branches,
+        help="Hide commits from merged branches, i.e. only display mainline commits",
+    ),
+    highlight_commit_messages: bool = typer.Option(
+        settings.highlight_commit_messages,
+        help="Make the displayed commit messages more prominent",
+    ),
+    invert_branches: bool = typer.Option(
+        settings.invert_branches,
+        help="Invert positioning of branches by reversing order of multiple parents where applicable",
     ),
     img_format: ImgFormat = typer.Option(
         settings.img_format,
@@ -60,11 +79,6 @@ def main(
     light_mode: bool = typer.Option(
         settings.light_mode,
         help="Enable light-mode with white background",
-    ),
-    transparent_bg: bool = typer.Option(
-        settings.transparent_bg,
-        "--transparent-bg",
-        help="Make background transparent",
     ),
     logo: pathlib.Path = typer.Option(
         settings.logo,
@@ -87,6 +101,11 @@ def main(
         settings.media_dir,
         help="The path to output the animation data and video file",
     ),
+    n: int = typer.Option(
+        settings.n,
+        "-n",
+        help="Number of commits to display from each branch head",
+    ),
     outro_bottom_text: str = typer.Option(
         settings.outro_bottom_text,
         help="Custom text to display below the logo during the outro",
@@ -94,6 +113,16 @@ def main(
     outro_top_text: str = typer.Option(
         settings.outro_top_text,
         help="Custom text to display above the logo during the outro",
+    ),
+    output_only_path: bool = typer.Option(
+        settings.output_only_path,
+        help="Only output the path to the generated media file to stdout (useful for other programs to ingest)",
+    ),
+    quiet: bool = typer.Option(
+        settings.quiet,
+        "--quiet",
+        "-q",
+        help="Suppress all output except errors",
     ),
     reverse: bool = typer.Option(
         settings.reverse,
@@ -113,48 +142,26 @@ def main(
         settings.speed,
         help="A multiple of the standard 1x animation speed (ex: 2 = twice as fast, 0.5 = half as fast)",
     ),
-    title: str = typer.Option(
-        settings.title,
-        help="Custom title to display at the beginning of the animation",
-    ),
-    video_format: VideoFormat = typer.Option(
-        settings.video_format.value,
-        help="Output format for the animation files.",
-        case_sensitive=False,
-    ),
     stdout: bool = typer.Option(
         settings.stdout,
         help="Write raw image data to stdout while suppressing all other program output",
     ),
-    output_only_path: bool = typer.Option(
-        settings.output_only_path,
-        help="Only output the path to the generated media file to stdout (useful for other programs to ingest)",
+    style: StyleOptions = typer.Option(
+        settings.style.value,
+        help="Graphical style of the output image or animated video",
     ),
-    quiet: bool = typer.Option(
-        settings.quiet,
-        "--quiet",
-        "-q",
-        help="Suppress all output except errors",
+    show_command_as_title: bool = typer.Option(
+        settings.show_command_as_title,
+        help="Use the simulated git command as the title of the output image or animated video",
     ),
-    invert_branches: bool = typer.Option(
-        settings.invert_branches,
-        help="Invert positioning of branches by reversing order of multiple parents where applicable",
+    title: str = typer.Option(
+        settings.title,
+        help="Custom title to display at the beginning of the animation",
     ),
-    hide_merged_branches: bool = typer.Option(
-        settings.hide_merged_branches,
-        help="Hide commits from merged branches, i.e. only display mainline commits",
-    ),
-    all: bool = typer.Option(
-        settings.all,
-        help="Display all local branches in the log output",
-    ),
-    color_by: ColorByOptions = typer.Option(
-        settings.color_by,
-        help="Color commits by parameter",
-    ),
-    highlight_commit_messages: bool = typer.Option(
-        settings.highlight_commit_messages,
-        help="Make the displayed commit messages more prominent",
+    transparent_bg: bool = typer.Option(
+        settings.transparent_bg,
+        "--transparent-bg",
+        help="Make background transparent",
     ),
     version: bool = typer.Option(
         False,
@@ -163,17 +170,10 @@ def main(
         help="Show the version of git-sim and exit",
         callback=version_callback,
     ),
-    style: StyleOptions = typer.Option(
-        settings.style.value,
-        help="Graphical style of the output image or animated video",
-    ),
-    font: str = typer.Option(
-        settings.font,
-        help="Font family used to display rendered text",
-    ),
-    show_command_as_title: bool = typer.Option(
-        settings.show_command_as_title,
-        help="Use the simulated git command as the title of the output image or animated video",
+    video_format: VideoFormat = typer.Option(
+        settings.video_format.value,
+        help="Output format for the animation files.",
+        case_sensitive=False,
     ),
 ):
     import git
