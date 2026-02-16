@@ -31,7 +31,7 @@ def get_font_name(font_path):
 
 def version_callback(value: bool) -> None:
     if value:
-        print(f"git-sim version {git_sim.__version__}")
+        print(f"git-sim (x) version {git_sim.__version__}")
         raise typer.Exit()
 
 
