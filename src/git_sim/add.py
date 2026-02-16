@@ -9,6 +9,7 @@ from git_sim.settings import settings
 
 
 class Add(GitSimBaseCommand):
+
     def __init__(self, files: List[str]):
         super().__init__()
         self.hide_first_tag = True

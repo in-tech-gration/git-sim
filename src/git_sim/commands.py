@@ -27,9 +27,15 @@ def add(
     from git_sim.add import Add
 
     settings.hide_first_tag = True
-    scene = Add(files=files)
-    handle_animations(scene=scene)
 
+    if ( files != None ):
+
+      scene = Add(files=files)
+      handle_animations(scene=scene)
+
+    else:
+
+      print("No files were referenced")
 
 def branch(
     name: str = typer.Argument(

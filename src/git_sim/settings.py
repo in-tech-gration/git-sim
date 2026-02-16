@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings
 
 from git_sim.enums import StyleOptions, ColorByOptions, ImgFormat, VideoFormat
 
-
 class Settings(BaseSettings):
     all: bool = False
     allow_no_commits: bool = False
@@ -34,7 +33,7 @@ class Settings(BaseSettings):
     outro_top_text: str = "Thanks for using Initial Commit!"
     quiet: bool = False
     reverse: bool = False
-    repo: str = "."
+    repo: str = ""
     show_command_as_title: bool = True
     show_intro: bool = False
     show_outro: bool = False
@@ -47,6 +46,5 @@ class Settings(BaseSettings):
 
     class Config:
         env_prefix = "git_sim_"
-
 
 settings = Settings()

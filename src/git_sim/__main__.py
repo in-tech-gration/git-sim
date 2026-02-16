@@ -223,15 +223,34 @@ def main(
         settings.font_context = contextlib.nullcontext()
         settings.font = font
 
+    repo = settings.repo.strip()
+    repo_len = len(repo)
+
     try:
         if sys.platform == "linux" or sys.platform == "darwin":
-            repo_name = git.repo.Repo(
-                search_parent_directories=True
-            ).working_tree_dir.split("/")[-1]
+
+            if ( repo_len == 0 ):
+              repo_name = git.repo.Repo(
+                  search_parent_directories=True
+              ).working_tree_dir.split("/")[-1]
+            else:
+              repo_name = git.repo.Repo(
+                  repo,
+                  search_parent_directories=True
+              ).working_tree_dir.split("/")[-1]
+
         elif sys.platform == "win32":
-            repo_name = git.repo.Repo(
-                search_parent_directories=True
-            ).working_tree_dir.split("\\")[-1]
+
+            if ( repo_len == 0 ):
+              repo_name = git.repo.Repo(
+                  search_parent_directories=True
+              ).working_tree_dir.split("\\")[-1]
+            else:
+              repo_name = git.repo.Repo(
+                  repo,
+                  search_parent_directories=True
+              ).working_tree_dir.split("\\")[-1]
+
     except git.InvalidGitRepositoryError as e:
         repo_name = ""
 
