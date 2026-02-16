@@ -79,7 +79,10 @@ class GitSimBaseCommand(m.MovingCameraScene):
 
     def init_repo(self):
         try:
-            self.repo = Repo(search_parent_directories=True)
+            if ( len(settings.repo.strip()) != 0 ):
+              self.repo = Repo(settings.repo, search_parent_directories=True)
+            else:
+              self.repo = Repo(search_parent_directories=True)
             repo_name = os.path.basename(self.repo.working_dir)
             new_dir = os.path.join(tempfile.gettempdir(), "git_sim", repo_name)
             new_dir2 = os.path.join(tempfile.gettempdir(), "git_sim", repo_name + "2")
