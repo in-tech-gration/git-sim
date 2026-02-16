@@ -124,6 +124,10 @@ def main(
         "-q",
         help="Suppress all output except errors",
     ),
+    fadeout: bool = typer.Option(
+        settings.fadeout,
+        help="Fadeout at the end of the video",
+    ),
     repo: str = typer.Option(
         settings.repo,
         help="Pick repo to work on",
@@ -186,6 +190,7 @@ def main(
     settings.animate = animate
     settings.n = n
     settings.auto_open = auto_open
+    settings.fadeout = fadeout
     settings.img_format = img_format
     settings.light_mode = light_mode
     settings.transparent_bg = transparent_bg

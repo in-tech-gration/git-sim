@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     auto_open: bool = True
     color_by: Union[ColorByOptions, None] = None
     files: Union[List[pathlib.Path], None] = None
+    fadeout: bool = False
     font_context: bool = False
     font: str = "Monospace"
     hide_first_tag: bool = False

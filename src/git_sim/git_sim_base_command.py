@@ -16,6 +16,7 @@ from git_sim.settings import settings
 
 
 class GitSimBaseCommand(m.MovingCameraScene):
+  
     def __init__(self):
         super().__init__()
         self.cmd = "git "
@@ -244,7 +245,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
             self.wait(3)
 
     def fadeout(self):
-        if settings.animate:
+        if settings.animate and settings.fadeout:
             self.wait(3)
             self.play(m.FadeOut(self.toFadeOut), run_time=1 / settings.speed)
         else:
@@ -1380,6 +1381,7 @@ class GitSimBaseCommand(m.MovingCameraScene):
 
 
 class DottedLine(m.Line):
+
     def __init__(self, *args, dot_spacing=0.4, dot_kwargs={}, **kwargs):
         m.Line.__init__(self, *args, **kwargs)
         n_dots = int(self.get_length() / dot_spacing) + 1
