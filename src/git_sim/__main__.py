@@ -124,6 +124,10 @@ def main(
         "-q",
         help="Suppress all output except errors",
     ),
+    repo: str = typer.Option(
+        settings.repo,
+        help="Pick repo to work on",
+    ),
     reverse: bool = typer.Option(
         settings.reverse,
         "--reverse",
@@ -196,6 +200,7 @@ def main(
     settings.show_intro = show_intro
     settings.show_outro = show_outro
     settings.speed = speed
+    settings.repo = repo
     settings.title = title
     settings.video_format = video_format
     settings.stdout = stdout
